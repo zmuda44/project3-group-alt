@@ -5,12 +5,11 @@ import LandingPage from './gb-front-end/pages/landingPage'
 import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from '@apollo/client';
 
 
-const httpLink = new createHttpLink({
-  uri: '/graphql',
-});
+const httpLink = new createHttpLink();
 
 // took out authentication.  see mod 21 challenge for code
 const client = new ApolloClient({
+  uri: '/graphql',
   cache: new InMemoryCache(),
 });
 

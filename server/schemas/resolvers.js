@@ -1,15 +1,44 @@
 // import { AuthenticationError } from 'apollo-server-express';  first comment
+
+//This was another big one. needs to be exported as what they export, not the file name
+
 const { User, Trip } = require('../models');
 // import { signToken } from './utils/auth';
+
 
 const resolvers = {
   Query: {
     // Query to fetch all users
+
     users: async () => {
       return await User.find({});
     },
+  },
+  Mutation: {     
+  addUser: async (parent, args) => {
+    console.log(args)
+    try {
 
-  }
+      const { username, email, password } = args;
+
+      // Create the user with the provided username, email, and password
+      const user = await User.create({ username, email, password });
+
+
+      // If user creation fails, throw an error
+      if (!user) {
+        throw new Error('Something is wrong!');
+      }
+
+      // Return the created user object
+      return user;
+    } catch (error) {
+      console.error(error);
+      // You can throw the error to be caught by the client-side, or return a specific error message
+      throw new Error('Failed to create user');
+    }
+  },
+}
 };
 
 module.exports = resolvers;

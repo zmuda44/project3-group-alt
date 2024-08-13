@@ -2,7 +2,8 @@ import { useState } from 'react';
 // import { Link } from 'react-router-dom';
 
 import { useMutation } from '@apollo/client';
-import { ADD_USER } from '../../utils/mutations';
+import ADD_USER from '../../utils/mutations';
+
 
 
 
@@ -13,9 +14,10 @@ const Signup = () => {
     password: '',
   });
 
-  const [addUser, { error, data }] = useMutation(ADD_USER);  
+  const [addUser, { loading, error, data }] = useMutation(ADD_USER);  
 
   const handleChange = (event) => {
+
     const { name, value } = event.target;
 
     setFormState({
@@ -26,19 +28,34 @@ const Signup = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    console.log(userFormState);
-
-    // try {
-    //   const { data } = await addUser({
-    //     variables: { ...formState },
-    //   });
 
 
-  };
+    try {
+
+      const {username, email, password} = userFormState;
+
+      console.log(username)
+      console.log(email)
+      console.log(password)
+
+      // find where you found code that says: variables { ..userFormState} this was the problem the whole time. i was trying to work with userFormState down here. it's somehow destructured for me already
+      const response = await addUser({
+        variables: { username, email, password },
+      });
+      console.log(response);
+    }
+  catch (e) {
+    console.error(e);
+  }
+
+  }
+
 
   return (
     <div>
-      <h4>Sign Up</h4>
+      <h4>Sign Up</h4> {
+        loading ? <div>Loading...</div> : null
+      }
           <div>
               <form onSubmit={handleFormSubmit}>
                 <input
