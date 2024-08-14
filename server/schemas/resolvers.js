@@ -14,7 +14,7 @@ const resolvers = {
       return await User.find({});
     },
     user: async (parent, { id }) => {
-      return User.findById(id);
+      return User.findById(id).populate('trips');      
     },
     me: async (parent, args, context) => {
       if (context.user) {
