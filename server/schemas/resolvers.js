@@ -13,33 +13,78 @@ const resolvers = {
     users: async () => {
       return await User.find({});
     },
+    user: async (parent, { id }) => {
+      return User.findById(id);
+    },
+    me: async (parent, args, context) => {
+      if (context.user) {
+        return User.findById(context.user._id);
+      }
+      throw new AuthenticationError('You need to be logged in!');
+    },
   },
   Mutation: {     
-  addUser: async (parent, args) => {
-    console.log(args)
-    try {
+    addUser: async (parent, args) => {
+      console.log(args)
+      try {
 
-      const { username, email, password } = args;
+        const { username, email, password } = args;
 
-      // Create the user with the provided username, email, and password
-      const user = await User.create({ username, email, password });
+        // Create the user with the provided username, email, and password
+        const user = await User.create({ username, email, password });
 
 
-      // If user creation fails, throw an error
+        // If user creation fails, throw an error
+        if (!user) {
+          throw new Error('Something is wrong!');
+        }
+
+        // Return the created user object
+        return user;
+      } catch (error) {
+        console.error(error);
+        // You can throw the error to be caught by the client-side, or return a specific error message
+        throw new Error('Failed to create user');
+      }
+    },
+    loginUser: async (parent, { email, password }) => {
+  
+      const user = await User.findOne({ email });
+
       if (!user) {
-        throw new Error('Something is wrong!');
+        // 
+
       }
 
-      // Return the created user object
+      const correctPw = await user.isCorrectPassword(password);
+
+      if (!correctPw) {
+        return "incorrect password"
+      }
+
       return user;
-    } catch (error) {
-      console.error(error);
-      // You can throw the error to be caught by the client-side, or return a specific error message
-      throw new Error('Failed to create user');
+    },
+    addTrip : async (parent, args) => {
+      console.log(args)
+      try {
+
+        const { location, journalEntry } = args;
+
+        // Create the user with the provided username, email, and password
+        const trip = await Trip.create({ location, journalEntry });
+
+        const user = await User.findOneAndUpdate(
+          { _id: args.userId },
+          { $addToSet: { trips: trip } },
+          { new: true, runValidators: true }
+        );
+      } catch (error) {
+        console.error(error);
+        throw new Error('Failed');
+      }
     }
-  },
+  }
 }
-};
 
 module.exports = resolvers;
  // export default resolvers;

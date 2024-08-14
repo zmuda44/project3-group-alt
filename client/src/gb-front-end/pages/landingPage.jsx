@@ -13,8 +13,7 @@ function LandingPage() {
         <p>Share travel plans, tips, and advice. </p>
         <p>Where's the best spot to stay? What was the cost of lunch? </p>
       </div>
-      <Login />
-      <Signup />
+
     </div>
 
   )

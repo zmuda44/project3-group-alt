@@ -32,6 +32,7 @@ const typeDefs = `
   type Mutation {
     addUser(username: String!, email: String!, password: String!): User
     loginUser(email: String!, password: String!): User
+    addTrip(userId: ID!, location: String!, journalEntry: String!): User
     addComment(commentText: String!): Comment
     removeComment(commentId: ID!): Comment
   }

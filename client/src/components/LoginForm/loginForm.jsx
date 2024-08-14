@@ -1,13 +1,13 @@
 import { useState } from 'react';
 // import { Link } from 'react-router-dom';
-// import { useMutation } from '@apollo/client';
-// import { LOGIN_USER } from '../utils/mutations';
+import { useMutation } from '@apollo/client';
+import { LOGIN_USER } from '../../utils/mutations';
 
 // import Auth from '../utils/auth';
 
-const Login = (props) => {
+const Login = () => {
   const [userFormState, setFormState] = useState({ email: '', password: '' });
-  // const [login, { error, data }] = useMutation(LOGIN_USER);
+  const [loginUser, { loading, error, data }] = useMutation(LOGIN_USER);
 
   // update state based on form input changes
   const handleChange = (event) => {
@@ -23,10 +23,27 @@ const Login = (props) => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     console.log(userFormState);
-    // try {
-    //   const { data } = await login({
-    //     variables: { ...formState },
-    //   });
+    try {
+      const {email, password} = userFormState;
+
+      console.log(email, password)
+      const response = await loginUser({
+        // variables: { ...formState },
+        variables: { email, password },
+      });
+
+      const userId = response.data.loginUser._id;
+
+      if (!userId)  {
+        alert ('Invalid credentials');
+      }
+      else {
+        document.location.replace('/profile');
+      }
+
+
+
+      localStorage.setItem('userId', userId);
 
     //   Auth.login(data.login.token);
     // } catch (e) {
@@ -38,7 +55,8 @@ const Login = (props) => {
       email: '',
       password: '',
     });
-  };
+  }  catch (e) { console.error(e); }
+}
 
   return (
     <div>
@@ -62,13 +80,13 @@ const Login = (props) => {
                   value={userFormState.password}
                   onChange={handleChange}
                 />
-                <input               
+                {/* <input               
                   placeholder="******"
                   name="confirm-password"
                   type="password"
                   value={userFormState.password}
                   onChange={handleChange}
-                />
+                /> */}
                 <button
                   style={{ cursor: 'pointer' }}
                   type="submit"

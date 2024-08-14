@@ -1,8 +1,14 @@
 import { useState } from 'react'
+import { Outlet } from 'react-router-dom';
 import './App.css'
-import Profile from './pages/profile'
-import LandingPage from './gb-front-end/pages/landingPage'
 import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from '@apollo/client';
+import Header from './components/header';
+import LandingPage from './gb-front-end/pages/landingPage';
+import Profile from './pages/profile';
+import Signup from './components/SignupForm/signupForm';
+import Login from './components/LoginForm/loginForm';
+import Calendar from './components/calendar';
+import Footer from './components/footer';
 
 
 const httpLink = new createHttpLink();
@@ -17,8 +23,11 @@ function App() {
   return (
     <div>
     <ApolloProvider client={client}>
-    <LandingPage />
-    <Profile />
+    <Header />
+    <Outlet />
+    <Footer />
+
+
     </ApolloProvider>
   </div>
   );

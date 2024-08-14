@@ -2,19 +2,14 @@ import React from 'react';
 import Header from '../components/header';
 import Footer from '../components/footer';
 
+import AddFriend from '../components/AddFriend/addFriend';
+import AddTrip from '../components/AddTrip/addTrip';
+
+
 
 const Profile = ({ username }) => {
     return (
         <div>
-            <div>
-                <Header />
-            </div>
-            <div id="header">
-                {/* Include header.html */}
-                {/* Add your header content here */}
-            </div>
-
-
             {/* Main content */}
             <div id="main-content">
                 <h1>Welcome {username}</h1>
@@ -25,13 +20,17 @@ const Profile = ({ username }) => {
                     {/* Add your friends list here */}
                 </div>
 
-                
+                <AddFriend />
+
+                <AddTrip />
 
                 {/* Upcoming trips box */}
                 <div id="upcoming-trips-box">
                     <h2>Upcoming Trips</h2>
                     {/* Add your upcoming trips list here */}
                 </div>
+
+                
 
                 {/* Previous trips box */}
                 <div id="previous-trips-box">
@@ -49,10 +48,6 @@ const Profile = ({ username }) => {
             {/* User icon box */}
             <div id="user-icon-box">
                 {/* Add your user icon here */}
-            </div>
-
-            <div>
-                <Footer />
             </div>
         </div>
     );

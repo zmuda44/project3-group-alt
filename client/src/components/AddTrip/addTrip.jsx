@@ -2,19 +2,23 @@ import { useState } from 'react';
 // import { Link } from 'react-router-dom';
 
 import { useMutation } from '@apollo/client';
-import { ADD_USER } from '../../utils/mutations';
+import { ADD_TRIP } from '../../utils/mutations';
 
 
 
 
-const Signup = () => {
+const AddTrip = () => {
   const [userFormState, setFormState] = useState({
-    username: '',
-    email: '',
-    password: '',
+    location: '',
+    journalEntry: '',
   });
 
-  const [addUser, { loading, error, data }] = useMutation(ADD_USER);  
+  const userId = localStorage.getItem('userId');
+
+  
+
+
+  const [addTrip, { loading, error, data }] = useMutation(ADD_TRIP);  
 
   const handleChange = (event) => {
 
@@ -32,22 +36,21 @@ const Signup = () => {
 
     try {
 
-      const {username, email, password} = userFormState;
+      const {location, journalEntry} = userFormState;
+
+      console.log(location, journalEntry, userId)
 
 
 
       // find where you found code that says: variables { ..userFormState} this was the problem the whole time. i was trying to work with userFormState down here. it's somehow destructured for me already
-      const response = await addUser({
-        variables: { username, email, password },
+      const response = await addTrip({
+        variables: { location, journalEntry, userId },
       });
 
-      const userId = response.data.addUser._id;
-
-      console.log(userId)
-
-      localStorage.setItem('userId', userId);
-
-      document.location.replace('/profile');
+      setFormState({
+        location: '',
+        journalEntry: '',
+      });
    
     }
   catch (e) {
@@ -59,35 +62,35 @@ const Signup = () => {
 
   return (
     <div>
-      <h4>Sign Up</h4> {
+      <h4>Add Trip</h4> {
         loading ? <div>Loading...</div> : null
       }
           <div>
               <form onSubmit={handleFormSubmit}>
                 <input
                   className="form-input"
-                  placeholder="Your username"
-                  name="username"
+                  placeholder="Location of trip"
+                  name="location"
                   type="text"
-                  value={userFormState.username}
+                  value={userFormState.location}
                   onChange={handleChange}
                 />
                 <input
                   className="form-input"
-                  placeholder="Your email"
-                  name="email"
-                  type="email"
-                  value={userFormState.email}
+                  placeholder="Journal entry"
+                  name="journalEntry"
+                  type="text"
+                  value={userFormState.journalEntry}
                   onChange={handleChange}
                 />
-                <input
+                {/* <input
                   className="form-input"
-                  placeholder="******"
-                  name="password"
-                  type="password"
-                  value={userFormState.password}
+                  placeholder="user"
+                  name="userId"
+                  type="text"
+                  value={userFormState.user}
                   onChange={handleChange}
-                />
+                /> */}
                 <button            
                   style={{ cursor: 'pointer' }}
                   type="submit"
@@ -101,7 +104,7 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default AddTrip;
 
 
 

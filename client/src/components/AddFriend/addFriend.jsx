@@ -2,12 +2,12 @@ import { useState } from 'react';
 // import { Link } from 'react-router-dom';
 
 import { useMutation } from '@apollo/client';
-import { ADD_USER } from '../../utils/mutations';
+import ADD_USER from '../../utils/mutations';
 
 
 
 
-const Signup = () => {
+const AddFriend = () => {
   const [userFormState, setFormState] = useState({
     username: '',
     email: '',
@@ -28,7 +28,7 @@ const Signup = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-
+console.log(addUser)
 
     try {
 
@@ -40,12 +40,6 @@ const Signup = () => {
       const response = await addUser({
         variables: { username, email, password },
       });
-
-      const userId = response.data.addUser._id;
-
-      console.log(userId)
-
-      localStorage.setItem('userId', userId);
 
       document.location.replace('/profile');
    
@@ -59,7 +53,7 @@ const Signup = () => {
 
   return (
     <div>
-      <h4>Sign Up</h4> {
+      <h4>Add Friend</h4> {
         loading ? <div>Loading...</div> : null
       }
           <div>
@@ -101,7 +95,7 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default AddFriend;
 
 
 
